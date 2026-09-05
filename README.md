@@ -5,7 +5,7 @@ SpotHole is a real-time, AI-powered system that detects potholes from images and
 Built for **smart infrastructure, automated road inspection, and road maintenance decision-making**.
 ---
 
-## 📌 Overview
+## Overview
 
 Manual pothole inspection is slow, labor-intensive, and difficult to scale across large road networks. **SpotHole** automates this process using computer vision and generative AI.
 
@@ -21,21 +21,21 @@ Evaluation was performed using **RDD2022 and Roboflow datasets** containing 10,0
 | YOLOv10 | 0.948 | 0.631 | 70 |
 | **YOLOv12 (SpotHole)** | **0.956** | **0.654** | **79** |
 
-- 🎯 **94.3%** agreement with expert road-condition labeling
-- ⚡ Approximately **79 FPS** real-time inference
-- 📍 Automatic GPS-based geotagging using image EXIF metadata
-- 📊 Automated pothole severity classification
-- 🤖 AI-generated road condition summaries
+- **94.3%** agreement with expert road-condition labeling
+- Approximately **79 FPS** real-time inference
+- Automatic GPS-based geotagging using image EXIF metadata
+- Automated pothole severity classification
+- AI-generated road condition summaries
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 Real-Time Pothole Detection
+### Real-Time Pothole Detection
 
 Upload an image or video and SpotHole detects potholes frame-by-frame using a trained YOLOv12 model.
 
-### 🚦 Severity Classification
+### Severity Classification
 
 Detected potholes are classified into:
 
@@ -45,15 +45,15 @@ Detected potholes are classified into:
 
 Severity is estimated using bounding-box geometry, area, and shape characteristics.
 
-### 📍 GPS Geotagging
+### GPS Geotagging
 
 The system extracts GPS coordinates from image EXIF metadata and displays pothole locations on an interactive Leaflet.js map.
 
-### 🤖 AI-Generated Road Condition Summaries
+### AI-Generated Road Condition Summaries
 
 Google Gemini analyzes detection results and generates plain-English road condition summaries and maintenance recommendations.
 
-### 📄 PDF Reporting
+### PDF Reporting
 
 Generate a formatted PDF report containing:
 
@@ -63,7 +63,7 @@ Generate a formatted PDF report containing:
 - GPS coordinates
 - Road-condition summary
 
-### 🗺️ Interactive Dashboard
+### Interactive Dashboard
 
 The Flask-based dashboard provides:
 
@@ -78,7 +78,7 @@ The Flask-based dashboard provides:
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```text
                  Image / Video Upload
@@ -132,7 +132,7 @@ The Flask-based dashboard provides:
 | Training Data | RDD2022 + Roboflow |
 
 ---
-# 🚀 Getting Started
+# Getting Started
 
 ## Prerequisites
 
@@ -195,7 +195,7 @@ pip install -r requirements.txt
 
 ---
 
-# 🔑 Gemini API Configuration
+# Gemini API Configuration
 
 SpotHole uses Google Gemini to generate natural-language road condition summaries.
 
@@ -221,7 +221,7 @@ $env:GEMINI_API_KEY="your-api-key-here"
 export GEMINI_API_KEY="your-api-key-here"
 ```
 
-> ⚠️ **Never hardcode or commit your API key to GitHub.**
+> **Never hardcode or commit your API key to GitHub.**
 
 If you use a `.env` file, add it to `.gitignore`:
 
@@ -231,7 +231,7 @@ If you use a `.env` file, add it to `.gitignore`:
 
 ---
 
-# ▶️ Run the Application
+# Run the Application
 
 Start the Flask application:
 
@@ -247,7 +247,7 @@ http://localhost:5000
 
 ---
 
-# 📊 How It Works
+# How It Works
 
 ### 1. Upload
 
@@ -287,7 +287,7 @@ Detection results, severity information, GPS coordinates, and AI-generated summa
 
 ---
 
-# 📈 Model Performance
+# Model Performance
 
 SpotHole was evaluated against multiple YOLO versions.
 
@@ -301,21 +301,21 @@ YOLOv12 achieved the highest reported detection performance among the evaluated 
 
 ---
 
-# 🎯 Applications
+# Applications
 
 SpotHole can support:
 
-- 🛣️ Municipal road maintenance
-- 🚗 Vehicle-based road inspection
-- 🚁 Drone-assisted infrastructure monitoring
-- 🏙️ Smart city infrastructure
-- 📍 Geospatial pothole mapping
-- 🔧 Road repair prioritization
-- 📊 Automated infrastructure reporting
+- Municipal road maintenance
+- Vehicle-based road inspection
+- Drone-assisted infrastructure monitoring
+- Smart city infrastructure
+- Geospatial pothole mapping
+- Road repair prioritization
+- Automated infrastructure reporting
 
 ---
 
-# ⚠️ Limitations
+# Limitations
 
 - Performance may decrease under poor lighting conditions.
 - Heavy rain and adverse weather can affect detection accuracy.
@@ -325,23 +325,23 @@ SpotHole can support:
 
 ---
 
-# 🔮 Future Work
+# Future Work
 
 Planned improvements include:
 
-- 🚁 Drone-based aerial inspection
-- 🌐 City-scale pothole mapping
-- 📡 IoT/V2I integration
-- 📱 Mobile application integration
-- 🌦️ Improved performance under adverse weather conditions
-- 🧠 Improved severity estimation
-- 📚 Expansion of training datasets
-- ☁️ Cloud deployment
-- 📊 Historical pothole monitoring and maintenance tracking
+- Drone-based aerial inspection
+- City-scale pothole mapping
+- IoT/V2I integration
+- Mobile application integration
+- Improved performance under adverse weather conditions
+- Improved severity estimation
+- Expansion of training datasets
+- Cloud deployment
+- Historical pothole monitoring and maintenance tracking
 
 ---
 
-# 📚 Datasets
+# Datasets
 
 The project uses pothole datasets including:
 
@@ -352,13 +352,13 @@ The combined dataset contains **10,000+ annotated instances** used for model tra
 
 ---
 
-# ⭐ Acknowledgements
+# Acknowledgements
 
 We acknowledge the open-source computer vision, deep learning, and generative AI communities whose tools, frameworks, and datasets supported the development of SpotHole.
 
 ---
 
-# 🕳️ SpotHole
+# SpotHole
 
 **Detect. Analyze. Map. Maintain.**
 
