@@ -347,6 +347,7 @@ The project uses pothole datasets including:
 
 - **RDD2022**
 - **Roboflow**
+- **Local Kanuru, Vijayawada pothole images**
 
 The combined dataset contains **10,000+ annotated instances** used for model training and evaluation.
 
