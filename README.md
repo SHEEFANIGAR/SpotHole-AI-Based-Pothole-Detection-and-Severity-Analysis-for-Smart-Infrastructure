@@ -1,4 +1,4 @@
-# 🕳️ SpotHole — AI-Based Pothole Detection & Severity Analysis
+# 🕳️ SpotHole - AI-Based Pothole Detection & Severity Analysis
 
 SpotHole is a real-time, AI-powered system that detects potholes from images and videos, analyzes their severity, geotags them on a live map, and generates plain-English road condition summaries using Generative AI.
 
