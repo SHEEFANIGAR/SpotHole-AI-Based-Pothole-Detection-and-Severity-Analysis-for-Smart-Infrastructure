@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <header>
+      <h1>SpotHole Detection Dashboard</h1>
+      <p>Pothole Vision AI | YOLOv12</p>
+    </header>
+
+    <div class="container">
+      <div class="card">
+        <h2>Upload Media</h2>
+        <div class="upload-box">
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*,video/*" required />
+            <br />
+            <button type="submit">Upload & Detect</button>
+          </form>
+        </div>
+        <div class="stats">
+          <h3>Detections: <span id="count">0</span></h3>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Detection Output</h2>
+        <img
+          id="videoFeed"
+          src="{{ url_for('video_feed') }}"
+          alt="Output Feed"
+        />
+      </div>
+    </div>
+
+    <script>
+      setInterval(async () => {
+        const res = await fetch("/detection_count");
+        const data = await res.json();
+        document.getElementById("count").innerText = data.detections;
+      }, 1000);
+    </script>
+  </body>
+</html>

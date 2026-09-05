@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Detection Output</title>
+  </head>
+  <body>
+    <h2>Detection in Progress...</h2>
+    <img src="{{ url_for('video_feed') }}" width="800" />
+    <p>Detected objects: <span id="count">0</span></p>
+
+    <script>
+      setInterval(() => {
+        fetch("/detection_count")
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("count").innerText = data.detections;
+          });
+      }, 1000);
+    </script>
+  </body>
+</html>
+2

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpotHole | AI Pothole Detection Dashboard</title>
+
+    <!-- 🌍 Leaflet Map -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #3b82f6;
+        --secondary: #1e40af;
+        --accent: #60a5fa;
+        --bg-dark: #0f172a;
+        --bg-card: rgba(30, 41, 59, 0.8);
+        --text-light: #e2e8f0;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: radial-gradient(circle at top, #0f172a, #020617);
+        color: var(--text-light);
+        overflow-x: hidden;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(90deg, var(--secondary), var(--primary));
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2.3rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .header p {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      /* Dashboard Layout */
+      .dashboard-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 20px;
+        flex-wrap: wrap;
+      }
+
+      .video-container {
+        flex: 2;
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 0 25px rgba(37, 99, 235, 0.3);
+        position: relative;
+      }
+
+      .video-feed {
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid var(--primary);
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+        transition: 0.3s;
+      }
+
+      .video-feed:hover {
+        transform: scale(1.02);
+      }
+
+      /* Upload + Buttons */
+      .upload-section {
+        text-align: center;
+        background: rgba(15, 23, 42, 0.95);
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid var(--primary);
+        margin-top: 20px;
+        backdrop-filter: blur(8px);
+      }
+
+      .upload-label,
+      .btn-custom {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        padding: 10px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        margin: 10px 8px;
+        border: none;
+      }
+
+      .upload-label:hover,
+      .btn-custom:hover {
+        background: var(--accent);
+        box-shadow: 0 0 15px rgba(96, 165, 250, 0.4);
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      /* Stats Panel */
+      .stats-panel {
+        flex: 1;
+        background: var(--bg-card);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+        backdrop-filter: blur(10px);
+      }
+
+      .stats-panel h2 {
+        color: var(--accent);
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+
+      .stats-item {
+        background: rgba(17, 24, 39, 0.7);
+        margin: 12px 0;
+        padding: 14px 15px;
+        border-radius: 8px;
+        border-left: 3px solid var(--primary);
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .stats-item:hover {
+        background: rgba(30, 41, 59, 0.9);
+        transform: translateX(3px);
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        background: linear-gradient(90deg, var(--secondary), var(--primary));
+        color: #cbd5e1;
+        padding: 1rem;
+        font-size: 0.9rem;
+        width: 100%;
+        margin-top: 40px;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Map Box */
+      #map {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 320px;
+        height: 220px;
+        border-radius: 14px;
+        overflow: hidden;
+        background-color: #0f172a;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        border: 2px solid var(--primary);
+        z-index: 10000 !important;
+        display: block;
+        visibility: visible;
+      }
+
+      /* AI Box */
+      #ai-analysis {
+        background: rgba(20, 25, 45, 0.8);
+        border-left: 3px solid var(--accent);
+        color: #e2e8f0;
+        font-size: 0.95rem;
+        box-shadow: inset 0 0 10px rgba(96, 165, 250, 0.1);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>SpotHole - AI Pothole Detection Dashboard</h1>
+      <p>Empowering Smarter Roads with Deep Learning Vision</p>
+    </div>
+
+    <div class="dashboard-container">
+      <div class="video-container">
+        <img
+          src="{{ url_for('video_feed') }}"
+          class="video-feed"
+          alt="Video Feed"
+        />
+
+        <div class="upload-section">
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file" class="upload-label">📷 Upload Image/Video</label>
+            <input
+              type="file"
+              id="file"
+              name="file"
+              accept="image/*,video/*"
+              onchange="this.form.submit()"
+            />
+          </form>
+
+          <button onclick="analyzePotholeAI()" class="btn-custom">
+            🤖 AI Severity Analysis
+          </button>
+
+          <div id="ai-analysis" class="stats-item" style="margin-top: 15px">
+            <strong>AI Analysis:</strong>
+            <p id="ai-text">Click the button above to generate AI insights.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-panel">
+        <h2>Analysis Overview</h2>
+        <div class="stats-item">
+          <strong>Status:</strong> Active & Monitoring
+        </div>
+        <div class="stats-item"><strong>Frame Rate:</strong> ~30 FPS</div>
+        <div class="stats-item">
+          <strong>Detections:</strong> <span id="detection-count">0</span>
+        </div>
+        <div class="stats-item"><strong>Confidence Threshold:</strong> 0.7</div>
+      </div>
+    </div>
+
+    <div class="stats-panel" style="max-width: 900px; margin: 30px auto">
+      <h2>Geotagged Detections</h2>
+      <div id="geo-data">
+        <p>Waiting for detections...</p>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="footer">
+      <p>© 2025 SpotHole. All rights reserved. | EPICS-1</p>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      async function analyzePotholeAI() {
+        document.getElementById("ai-text").innerText =
+          "Analyzing... please wait.";
+        try {
+          const response = await fetch("/analyze_pothole", { method: "POST" });
+          const data = await response.json();
+          document.getElementById("ai-text").innerText =
+            data.analysis || "Error: " + (data.error || "Failed to analyze.");
+        } catch {
+          document.getElementById("ai-text").innerText =
+            "Error connecting to server.";
+        }
+      }
+
+      function updateDetectionCount() {
+        fetch("/detection_count")
+          .then((r) => r.json())
+          .then((data) => {
+            document.getElementById("detection-count").innerText =
+              data.detections;
+          });
+      }
+      setInterval(updateDetectionCount, 1000);
+
+      function updateGeoData() {
+        fetch("/geo_data")
+          .then((r) => r.json())
+          .then((data) => {
+            let content = data
+              .map(
+                (d) => `
+              <div class='stats-item'>
+                📍 <strong>Lat:</strong> ${d.lat},
+                <strong>Lon:</strong> ${d.lon}<br>🕒 ${d.timestamp}
+              </div>`
+              )
+              .join("");
+            document.getElementById("geo-data").innerHTML =
+              content || "<p>No detections yet.</p>";
+          });
+      }
+      setInterval(updateGeoData, 3000);
+
+      // ✅ Initialize map after DOM loads
+      window.onload = function () {
+        var map = L.map("map").setView([12.9716, 77.5946], 12);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "© OpenStreetMap",
+        }).addTo(map);
+
+        var markers = [];
+        async function updateMap() {
+          const response = await fetch("/geo_data");
+          if (!response.ok) return;
+          const data = await response.json();
+          markers.forEach((m) => map.removeLayer(m));
+          markers = [];
+          data.forEach((d) => {
+            const marker = L.marker([d.lat, d.lon])
+              .addTo(map)
+              .bindPopup(
+                `📍 Lat: ${d.lat}<br>Lon: ${d.lon}<br>🕒 ${d.timestamp}`
+              );
+            markers.push(marker);
+          });
+          if (data.length > 0) {
+            const latest = data[data.length - 1];
+            map.setView([latest.lat, latest.lon], 13);
+          }
+        }
+        setInterval(updateMap, 3000);
+      };
+    </script>
+  </body>
+</html>
